@@ -2,6 +2,8 @@
 
 namespace classes;
 
+use utils\DataBase;
+
 class Notes
 {
 
@@ -31,17 +33,28 @@ class Notes
         foreach ($var as $index => $v){
 
             $result[$index][] = [
-                'codigo'     => explode(',', $v)[0],
-                'materia'    => explode(',', $v)[1],
-                'media'      => explode(',', $v)[4],
-                'frequencia' => explode(',', $v)[5],
-                'faltas'     => explode(',', $v)[6],
-                'aprovado'   => explode(',', $v)[3],
+                'class_code'     => explode(',', $v)[0],
+                'class_period'     => explode(',', $v)[2],
+                'is_approved'   => (explode(',', $v)[3] == "Resources/checkTrue.png"),
+                'average'      => explode(',', $v)[4],
+                'absence'     => explode(',', $v)[6],
+                'observation' => explode(',', $v)[7],
+                'class_name'    => explode(',', $v)[1],
             ];
 
         }
 
         return $result;
+
+    }
+
+    public static function save($notes):void{
+
+        $db = new Database;
+
+        foreach ($notes as $note){
+            $db->insert('notes', $note[0]);
+        }
 
     }
 
